@@ -13,7 +13,9 @@ devList = [
     }
 ]
 
-@app.route('/<int:id>/', methods=['GET', 'PUT', 'DELETE'])
+
+#informacoes do devesenvolvedor pelo ID, com metodos GET, PUT e DEL
+@app.route('dev/<int:id>/', methods=['GET', 'PUT', 'DELETE'])
 def desenvolvedor(id):
     if request.method == 'GET':
         try:
@@ -28,12 +30,21 @@ def desenvolvedor(id):
 
     elif request.method == 'PUT':
         dados = json.loads(request.data)
-        dev[id] = dados
+        devList[id] = dados
         return jsonify(dados)
     
     elif request.method == 'DELETE':
-        dev.pop(id)
+        devList.pop(id)
         return jsonify({'status' : 'sucess', 'mensagem' : 'Registro deletado'})
+
+#Lista os desenvolvedore e permite criar novos devs
+@app.route('/dev/')
+def createDev():
+    if request.method == 'POST':
+        dados = json.loads(request.data)
+        devList.append(dados)
+        return jsonify({'status':'sucesso', 'mensagem':'dev criado'})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
